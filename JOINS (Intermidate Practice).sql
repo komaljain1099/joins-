@@ -1,0 +1,599 @@
+-- JOINS
+
+SELECT * 
+FROM employee_demographics;
+
+SELECT *
+FROM employee_salary;
+
+select * 
+from employee_demographics as dem
+inner join employee_salary as sal
+	on dem.employee_id = sal.employee_id
+;
+
+select dem.employee_id,age,occupation
+from employee_demographics as dem
+inner join employee_salary as sal
+	on dem.employee_id = sal.employee_id
+;
+
+select *
+from employee_demographics as dem
+left join employee_salary as sal
+	on dem.employee_id = sal.employee_id
+;
+
+select *
+from employee_demographics as dem
+RIGHT join employee_salary as sal
+	on dem.employee_id = sal.employee_id
+;
+
+-- self join
+select emp1.employee_id as emp_santa,
+emp1.first_name as first_name_santa,
+emp1.last_name as last_name_santa,
+emp2.employee_id as emp_emp,
+emp2.first_name as first_name_emp,
+emp2.last_name as last_name_emp
+from employee_salary emp1
+join employee_salary emp2
+	on emp1.employee_id + 1 = emp2.employee_id
+;
+
+
+-- JOINING MULTIPLE TABLES TOGETHER
+select *
+from employee_demographics as dem
+inner join employee_salary as sal
+	on dem.employee_id = sal.employee_id
+;
+
+INSERT INTO park_departments (department_id, department_name)
+VALUES
+(1, 'Parks and Recreation'),
+(2, 'Animal Control'),
+(3, 'Public Works'),
+(4, 'Healthcare'),
+(5, 'Library'),
+(6, 'Finance');
+
+SELECT *
+FROM park_departments;
+
+select *
+from employee_demographics as dem
+inner join employee_salary as sal
+	on dem.employee_id = sal.employee_id
+inner join park_departments pd
+	on sal.dept_id = pd.department_id;
+    
+    -- Q1. Display all employees along with their department names.
+    Select *
+    from employee_salary as sal
+    inner join park_departments as pd
+		on sal.dept_id = pd.department_id;
+        
+	-- Q2. Display only the employees who have a matching department.
+    
+    
+    
+
+    
+    -- Display each employee's first name along with their department name.
+    select first_name,department_name
+    from employee_salary as sal
+    inner join park_departments as pd
+		on sal.dept_id = pd.department_id;
+        
+    -- Display the first name, occupation, and department name of each employee.
+    select first_name,occupation,department_name
+		from employee_salary as sal
+	inner join park_departments as pd
+		on sal.dept_id = pd.department_id;
+        
+-- Display the first name and salary of employees who belong to the "Parks and Recreation" department.
+select *
+	from park_departments;
+	
+SELECT first_name,
+       salary
+FROM employee_salary AS sal
+INNER JOIN park_departments AS pd
+    ON sal.dept_id = pd.department_id
+WHERE pd.department_name = 'Parks and Recreation';
+
+-- Display the first name, department name, and salary of employees whose salary is greater than 50,000.
+select first_name, department_name,salary
+from employee_salary as sal
+		inner join park_departments as pd
+		on sal.dept_id = pd.department_id
+	where salary > 50000;
+
+-- Display the first name, occupation, and department name of employees who work in the 
+-- Parks and Recreation department and earn more than 50,000.
+select first_name, occupation, department_name,salary
+	from park_departments as pd
+inner join employee_salary as sal
+on sal.dept_id = pd.department_id
+where pd.department_name = 'Parks and Recreation' and salary > 50000;
+
+-- Display the first name, department name, and occupation of all employees who have a matching department.
+select first_name,department_name,occupation
+		from employee_salary as sal
+inner join park_departments as pd
+on sal.dept_id = pd.department_id;
+        
+-- Display the first name, salary, and department name of employees who work in the Finance department.
+select first_name,department_name,salary
+		from employee_salary as sal
+inner join park_departments as pd
+on sal.dept_id = pd.department_id        
+where department_name = 'Finance';
+
+-- Display the first name, salary, and department name of employees whose salary is greater than 60,000.
+select first_name,department_name,salary
+		from employee_salary as sal
+inner join park_departments as pd
+on sal.dept_id = pd.department_id
+where salary > 60000;
+
+-- -- Display the first name, salary, and department name of employees whose salary is greater than 60,000.
+select first_name,department_name,salary
+		from employee_salary as sal
+inner join park_departments as pd
+on sal.dept_id = pd.department_id
+where salary > 60000;
+
+-- Display the first name, occupation, salary, and department name of employees who belong to the Public Works department 
+-- and earn more than 50,000.
+select first_name,occupation,salary, department_name
+		from employee_salary as sal
+inner join park_departments as pd
+on sal.dept_id = pd.department_id
+where department_name = 'Public Works' and salary > 50000;
+
+select * 
+from park_departments;
+
+-- Display the first name, occupation, and department name of employees who work in the Parks and Recreation or Public Works department.
+select first_name,occupation,department_name
+from employee_salary as sal
+inner join park_departments as pd
+on sal.dept_id = pd.department_id
+where department_name in ('Parks and Recreation','Public Works');
+
+-- Display the first name, salary, and department name of employees who work in either the Healthcare or Finance department.
+select first_name,salary,department_name
+from employee_salary as sal
+inner join park_departments as pd
+on sal.dept_id = pd.department_id
+where department_name in ('Healthcare','Finance');
+
+-- Display the first name, salary, and department name of employees whose salary is between 40,000 and 70,000.
+select first_name,salary,department_name
+from park_departments as pd
+inner join employee_salary as sal
+on sal.dept_id = pd.department_id
+where salary between 40000 and 70000;
+
+-- Display the first name, occupation, salary, and department name of employees who work in the Parks and 
+-- Recreation department and have a salary between 50,000 and 70,000.
+select first_name,occupation,salary,department_name
+from park_departments as pd
+inner join employee_salary as sal
+on sal.dept_id = pd.department_id
+where department_name = 'Parks and Recreation'
+	and salary between 50000 and 70000;
+
+SELECT first_name, occupation, salary, department_name
+FROM park_departments AS pd
+INNER JOIN employee_salary AS sal
+    ON sal.dept_id = pd.department_id
+WHERE department_name = 'Parks and Recreation'
+  AND salary BETWEEN 50000 AND 70000;
+
+-- Display the first name, salary, and department name of employees who work in the Animal Control department OR earn more than 70,000.
+select first_name,salary,department_name 
+from park_departments as pd
+inner join employee_salary as sal
+on sal.dept_id = pd.department_id
+where department_name = 'Animal Control'
+ or salary > 70000;
+
+-- Display the first name, occupation, and department name of employees who work in the Healthcare department.
+select first_name,occupation,department_name
+from employee_salary as sal
+inner join park_departments as pd
+on sal.dept_id = pd.department_id
+where department_name = 'Healthcare';
+ 
+-- Display the first name, salary, and department name of employees earning more than 60,000, sorted by salary highest to lowest.
+select first_name,salary,department_name
+from employee_salary as sal
+inner join park_departments as pd
+on sal.dept_id = pd.department_id
+where salary > 60000 
+order by salary desc;
+
+-- Display the first name, occupation, salary, and department name of employees who work in either Finance or Public Works 
+-- and earn more than 50,000.
+select first_name,occupation,salary,department_name
+from employee_salary as sal
+inner join park_departments as pd
+on sal.dept_id = pd.department_id
+where (department_name = 'Public Works' 
+OR department_name = 'Finance')
+AND salary > 50000;
+
+-- Display the first name, salary, and department name of employees whose salary is between 50,000 and 80,000, 
+-- excluding the Parks and Recreation department.
+select first_name, salary,department_name
+from employee_salary as sal
+inner join park_departments as pd
+on sal.dept_id = pd.department_id
+where salary between 50000 and 80000 
+and department_name != 'Parks and Recreation';
+
+-- Display the first name, occupation, salary, and department name of employees who work in 
+-- Parks and Recreation, Healthcare, or Finance, sorted by salary from highest to lowest.
+select first_name,salary,department_name,occupation
+from employee_salary as sal
+inner join park_departments as pd
+on sal.dept_id = pd.department_id
+where department_name in ('Parks and Recreation','Healthcare','Finance')
+order by salary desc;
+
+-- LEFT JOIN
+
+-- Display every employee's first name along with their department name, including employees who don't have a matching department.
+select first_name,department_name
+from employee_salary as sal
+left join park_departments as pd
+on sal.dept_id = pd.department_id;
+
+-- Display all departments and the number of employees in each department, including departments with zero employees.
+select department_name, count(employee_id)
+from park_departments as pd
+left join employee_salary as sal
+on sal.dept_id = pd.department_id
+group by department_name;
+
+-- Display all departments and their total salary, including departments with no employees.
+select department_name,
+		sum(salary)
+from park_departments as pd
+left join employee_salary as sal
+on pd.department_id = sal.dept_id
+group by department_name;
+
+-- Display each department name and the highest salary in that department, including departments with no employees.
+select department_name,max(salary)
+from park_departments as pd
+left join employee_salary as sal
+on pd.department_id = sal.dept_id
+group by department_name
+order by max(salary) desc;
+
+-- Display departments where no employees are assigned to them.
+select department_name,first_name
+from park_departments as pd
+left join employee_salary as sal
+on pd.department_id = sal.dept_id
+where first_name is null;
+
+-- Display each department name and employee count, but show only departments having more than 1 employee.
+select department_name,
+		count(first_name)
+from park_departments as pd
+left join employee_salary as sal
+on pd.department_id = sal.dept_id
+group by department_name
+having count(first_name) > 1;
+
+-- Display each department name and its average salary, including departments with no employees.
+select department_name,
+		avg(salary)
+from park_departments as pd
+left join employee_salary as sal
+on pd.department_id = sal.dept_id
+group by department_name;
+
+-- Display the department name and total salary, but show only departments where the total salary is greater than 150,000.
+select department_name,
+		sum(salary)
+from park_departments as pd
+left join employee_salary as sal
+on pd.department_id = sal.dept_id
+group by department_name
+having sum(salary) > 150000;
+
+-- Display all departments and the names of their employees, including departments with no employees.
+select department_name, first_name
+from park_departments as pd
+left join employee_salary as sal
+on pd.department_id = sal.dept_id;
+
+-- RIGHT JOIN
+ -- Display all employees and their department names, including employees who don't have a matching department.
+ select first_name,department_name
+ from park_departments as sal
+ right join employee_salary as pd
+ on sal.department_id = pd.dept_id;
+ 
+ -- Display all departments and their employee names, including departments that have no employees.
+ select department_name,first_name
+ from employee_salary as sal
+ right join park_departments as pd
+ on sal.dept_id = pd.department_id ;
+ 
+ -- Display all departments and their employee count, including departments with zero employees.
+ select department_name,count(first_name)
+ from employee_salary as sal
+ right join park_departments as pd
+ on sal.dept_id = pd.department_id 
+ group by department_name;
+ 
+-- Display all departments and their total salary, including departments with no employees.
+select department_name,
+		sum(salary)
+from employee_salary as sal
+right join park_departments as pd
+on sal.dept_id = pd.department_id
+group by department_name;
+
+-- Display all departments and their highest salary, including departments with no employees.
+select department_name,max(salary)
+from employee_salary as sal
+right join park_departments as pd
+on sal.dept_id = pd.department_id
+group by department_name
+order by max(salary) desc;
+
+-- Display all departments where the highest salary is greater than 60,000, including the department name and highest salary.
+select department_name,max(salary)
+from employee_salary as sal
+right join park_departments as pd
+on sal.dept_id = pd.department_id
+group by department_name
+having max(salary) > 60000
+order by max(salary) desc;
+
+-- Display all departments that have no employees assigned to them.
+select department_name, first_name
+from employee_salary as sal
+right join park_departments as pd
+on sal.dept_id = pd.department_id
+where first_name is null
+;
+
+-- Display all departments and their average salary, including departments with no employees.
+select department_name,avg(salary)
+from employee_salary as sal
+right join park_departments as pd
+on sal.dept_id = pd.department_id
+group by department_name;
+
+-- Display all departments and their employee count, but show only departments with more than 1 employee.
+select department_name,count(first_name)
+from employee_salary as sal
+right join park_departments as pd
+on sal.dept_id = pd.department_id
+group by department_name
+having count(first_name) > 1;
+
+-- Display all departments and their total salary, but show only departments where the total salary is greater than ₹150,000.
+select department_name, sum(salary)
+from employee_salary as sal
+right join park_departments as pd
+on sal.dept_id = pd.department_id
+group by department_name
+having sum(salary) > 150000;
+
+
+-- Display all employees and all departments, showing:
+select department_name,first_name
+from employee_salary as sal
+left join park_departments as pd
+on sal.dept_id = pd.department_id
+
+UNION
+
+select department_name,first_name,salary
+from employee_salary as sal
+right join park_departments as pd
+on sal.dept_id = pd.department_id;
+
+-- Display all employees and all departments, but show only:
+select first_name,department_name,salary
+from employee_salary as sal
+left join park_departments as pd
+on sal.dept_id = pd.department_id
+
+UNION
+
+select first_name, department_name,salary
+from employee_salary as sal
+right join park_departments as pd
+on sal.dept_id = pd.department_id;
+
+-- Display all employees and all departments, showing:
+select first_name,department_name,occupation
+from employee_salary as sal
+left join park_departments as pd
+on sal.dept_id = pd.department_id
+
+UNION
+
+select first_name,department_name,occupation
+from employee_salary as sal
+right join park_departments as pd
+on sal.dept_id = pd.department_id
+order by first_name asc;
+
+select first_name,last_name
+from employee_demographics
+UNION 
+SELECT first_name,last_name
+FROM employee_salary;
+
+select first_name,last_name
+from employee_demographics
+UNION distinct
+SELECT first_name,last_name
+FROM employee_salary;
+
+select first_name,last_name
+from employee_demographics
+UNION ALL
+SELECT first_name,last_name
+FROM employee_salary;
+
+SELECT first_name,last_name,'OLD Man' as 'Label'
+from employee_demographics
+WHERE age > 40 AND gender = 'Male'
+UNION 
+SELECT first_name,last_name,'OLD Lady' as 'Label'
+from employee_demographics
+WHERE age > 40 AND gender = 'Female'
+UNION 
+SELECT first_name,last_name,'Highly Paid Employee' as Label
+from employee_salary
+WHERE salary > 60000
+order by first_name,last_name;
+
+-- Q1. You have two tables, employees_2025 and employees_2026, both containing:
+select first_name,last_name
+from employee_2025
+
+UNION
+
+select first_name,last_name
+from employee_2026;
+
+
+-- Q2. Combine all employee names from employees_2025 and employees_2026, but keep duplicates.
+select first_name,last_name
+from employee_2025
+
+UNION ALL
+
+select first_name,last_name
+from employee_2026;
+
+-- Q3. Combine the list of first_name values from both tables and display the result in alphabetical order.
+
+select first_name
+from employee_2025
+
+UNION 
+
+select first_name
+from employee_2026
+order by first_name;
+
+-- Q4. From employees_2025, get employees whose occupation is 'Data Analyst' and from employees_2026,
+-- get employees whose occupation is 'Data Analyst'. Combine both results using UNION.
+
+select first_name,last_name
+from employee_2025
+where occupation = 'Data Analyst'
+
+union 
+
+select first_name,last_name
+from employee_2026
+where occupation = 'Data Analyst';
+
+-- Q5. Combine employees earning more than 50,000 from employees_2025 with employees earning more than 60,000 from employees_2026.
+select first_name,last_name
+from employee_2025
+where salary > 50000
+
+union
+
+select first_name,last_name
+from employee_2026
+where salary > 60000;
+
+-- Q6. Combine all employees from both tables using UNION.
+select first_name,last_name
+from employee_2025
+
+UNION
+
+select first_name,last_name
+from employee_2026;
+
+-- Combine all employees from both tables using UNION ALL.
+select first_name,last_name
+from employee_2025
+
+UNION ALL 
+
+select first_name,last_name
+from employee_2026;
+
+-- Combine employees from both tables who have a salary greater than 50,000, 
+-- then sort the final result by salary from highest to lowest.
+select first_name,last_name,salary
+from employee_2025
+where salary > 50000
+
+union
+
+select first_name,last_name,salary
+from employee_2026
+where salary > 50000
+order by salary desc;
+
+-- Using employee_2025, employee_2026, and park_departments:
+-- Combine employees from both employee tables and display:
+select first_name,occupation,department_name
+from employee_2025 as e
+left join park_departments as pd
+on e.dept_id = pd.department_id
+where department_name = 'IT Department'
+
+UNION
+
+select first_name,occupation,department_name
+from employee_2026 as e
+left join park_departments as pd
+on e.dept_id = pd.department_id
+where department_name = 'IT Department'
+;
+
+-- Using employee_2025 and employee_2026:
+select first_name,occupation
+from employee_2025 
+where occupation != 'Data Analyst' 
+
+union
+
+select first_name, occupation
+from employee_2026
+where occupation != 'Data Analyst';
+
+-- Using employee_2025 and employee_2026: Combine employees whose salary is between 40,000 and 70,000 from both tables.
+select first_name
+from employee_2025
+where salary between 40000 and 70000
+
+UNION
+
+select first_name
+from employee_2026
+where salary between 40000 and 70000;
+
+
+
+
+
+
+
+select *
+from park_departments;
+
+
